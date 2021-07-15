@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Dropdown, Button, Container, Row, Col } from "react-bootstrap";
 
 function MoodSubmitter(props) {
@@ -7,8 +8,24 @@ function MoodSubmitter(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("submitted " + mood.moodVal);
-    //axios();
-    event.preventDefault();
+
+    let api = axios.create();
+    api.defaults.headers.common["Content-Type"] = "application/json";
+
+    api
+      .post("http://localhost:7071/api/entries", {
+        mood: mood.moodVal,
+        date: new Date(),
+      })
+      .then(
+        (response) => {
+          console.log(response);
+        },
+        (error) => {
+          console.log("error data:");
+          console.log(error.response.data);
+        }
+      );
   };
 
   const handleSelect = (eventKey) => {
