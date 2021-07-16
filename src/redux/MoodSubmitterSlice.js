@@ -2,19 +2,41 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Api from "../api/Api";
 
 export const postMood = createAsyncThunk("mood/postMood", async (payload) => {
+  console.log("------    posting obj:");
+  console.log(payload);
   let api = new Api();
-  await api.post(payload.path, payload.body);
-  console.log("from thunk, moodVal is: " + payload.body.mood);
-  return { moodVal: payload.body.mood };
+  const entryID = await api.post(payload.path, payload.body);
+  console.log("=== entry Id:");
+  //debugger;
+  console.log(entryID);
+  console.log("=== end..");
+
+  return { moodVal: payload.body.mood, moodId: entryID.id };
 });
+
+export const updateMood = createAsyncThunk(
+  "mood/updateMood",
+  async (payload) => {
+    console.log("---- updating obj:");
+    console.log(payload);
+    let api = new Api();
+    await api.update(payload.path, payload.body);
+    return { moodVal: payload.body.mood };
+  }
+);
 
 const MoodSubmitterSlice = createSlice({
   name: "mood",
-  initialState: { moodVal: 5 },
+  initialState: { mood: { moodVal: -1, moodId: null } },
   reducers: {},
   extraReducers: {
     [postMood.fulfilled]: (state, action) => {
-      return { moodVal: action.payload.moodVal };
+      return {
+        mood: {
+          moodVal: action.payload.moodVal,
+          moodId: action.payload.moodId,
+        },
+      };
     },
   },
 });

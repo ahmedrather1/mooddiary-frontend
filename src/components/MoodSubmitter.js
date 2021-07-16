@@ -32,15 +32,22 @@ function MoodSubmitter() {
   */
 
   const handleSelect = (eventKey) => {
-    console.log("from select, moodval is: " + moodFromSlice.moodVal);
-    let payload = {
-      path: "http://localhost:7071/api/entries",
-      body: {
-        mood: eventKey,
-        date: new Date(),
-      },
-    };
-    dispatch(postMood(payload));
+    console.log(
+      "from select, moodval is: " +
+        moodFromSlice.mood.moodVal +
+        " moodID is " +
+        moodFromSlice.mood.moodId
+    );
+    if (moodFromSlice.mood.moodVal === -1) {
+      let payload = {
+        path: "http://localhost:7071/api/entries",
+        body: {
+          mood: eventKey,
+          date: new Date(),
+        },
+      };
+      dispatch(postMood(payload));
+    }
   };
 
   return (
