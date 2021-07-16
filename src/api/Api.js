@@ -2,7 +2,7 @@ import axios from "axios";
 
 function Api() {}
 
-Api.prototype.post = function (path, body) {
+Api.prototype.post = async function (path, body) {
   let axiosApi = axios.create();
   axiosApi.defaults.headers.common["Content-Type"] = "application/json";
 

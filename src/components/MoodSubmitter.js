@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //import axios from "axios";
 import Api from "../api/Api";
 import { Dropdown, Button, Container, Row, Col } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { postMood } from "../redux/MoodSubmitterSlice";
 
-function MoodSubmitter(props) {
-  const [mood, setMood] = useState({ moodVal: 1 });
+function MoodSubmitter() {
+  //const [mood, setMood] = useState();
 
+  const moodFromSlice = useSelector((state) => state.mood);
+  const dispatch = useDispatch();
+
+  /*
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("submitted " + mood.moodVal);
@@ -16,11 +22,25 @@ function MoodSubmitter(props) {
       date: new Date(),
     });
   };
+  
 
   const handleSelect = (eventKey) => {
     console.log(eventKey);
     let updatedMood = { moodVal: eventKey };
     setMood(updatedMood);
+  };
+  */
+
+  const handleSelect = (eventKey) => {
+    console.log("from select, moodval is: " + moodFromSlice.moodVal);
+    let payload = {
+      path: "http://localhost:7071/api/entries",
+      body: {
+        mood: eventKey,
+        date: new Date(),
+      },
+    };
+    dispatch(postMood(payload));
   };
 
   return (
@@ -48,7 +68,7 @@ function MoodSubmitter(props) {
           </Dropdown>
         </Col>
         <Col className="mt-3 mb-3">
-          <h1>Mood: {mood.moodVal}</h1>
+          <h1>Mood: {moodFromSlice.moodVal}</h1>
         </Col>
         <Col></Col>
       </Row>
@@ -60,7 +80,7 @@ function MoodSubmitter(props) {
             className="mt-3 mb-3"
             variant="primary"
             type="submit"
-            onClick={handleSubmit}
+            //onClick={handleSubmit}
           >
             Submit
           </Button>
