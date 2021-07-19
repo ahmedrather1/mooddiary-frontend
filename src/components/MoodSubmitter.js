@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-//import axios from "axios";
-import Api from "../api/Api";
+import React from "react";
 import { Dropdown, Button, Container, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { postMood, updateMood } from "../redux/MoodSubmitterSlice";
+import Typography from "@material-ui/core/Typography";
+import Slider from "@material-ui/core/Slider";
 
 function MoodSubmitter() {
   //const [mood, setMood] = useState();
@@ -11,29 +11,14 @@ function MoodSubmitter() {
   const moodFromSlice = useSelector((state) => state.mood);
   const dispatch = useDispatch();
 
-  /*
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("submitted " + mood.moodVal);
+  // not sure what this does
+  function valuetext(value) {
+    return `${value}`;
+  }
 
-    let api = new Api();
-    api.post("http://localhost:7071/api/entries", {
-      mood: mood.moodVal,
-      date: new Date(),
-    });
-  };
-  
-
-  const handleSelect = (eventKey) => {
-    console.log(eventKey);
-    let updatedMood = { moodVal: eventKey };
-    setMood(updatedMood);
-  };
-  */
-
-  const handleSelect = (eventKey) => {
+  const handleSlider = (event, val) => {
     console.log(
-      "from select, moodval is: " +
+      "from slider, moodval is: " +
         moodFromSlice.mood.moodVal +
         " moodID is " +
         moodFromSlice.mood.moodId
@@ -42,7 +27,7 @@ function MoodSubmitter() {
       let postPayload = {
         path: "http://localhost:7071/api/entries",
         body: {
-          mood: eventKey,
+          mood: val,
           date: new Date(),
         },
       };
@@ -52,7 +37,7 @@ function MoodSubmitter() {
       let updatePayload = {
         path: "http://localhost:7071/api/entries/" + moodFromSlice.mood.moodId,
         body: {
-          mood: eventKey,
+          mood: val,
         },
       };
       dispatch(updateMood(updatePayload));
@@ -61,48 +46,21 @@ function MoodSubmitter() {
 
   return (
     <Container>
-      <Row className="col text-center">
-        <Col></Col>
-        <Col className="mt-4 mb-3">
-          <Dropdown onSelect={handleSelect}>
-            <Dropdown.Toggle variant="primary" id="dropdown-basic">
-              Select mood
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item eventKey="1">1</Dropdown.Item>
-              <Dropdown.Item eventKey="2">2</Dropdown.Item>
-              <Dropdown.Item eventKey="3">3</Dropdown.Item>
-              <Dropdown.Item eventKey="4">4</Dropdown.Item>
-              <Dropdown.Item eventKey="5">5</Dropdown.Item>
-              <Dropdown.Item eventKey="6">6</Dropdown.Item>
-              <Dropdown.Item eventKey="7">7</Dropdown.Item>
-              <Dropdown.Item eventKey="8">8</Dropdown.Item>
-              <Dropdown.Item eventKey="9">9</Dropdown.Item>
-              <Dropdown.Item eventKey="10">10</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Col>
-        <Col className="mt-3 mb-3">
-          <h1>Mood: {moodFromSlice.moodVal}</h1>
-        </Col>
-        <Col></Col>
-      </Row>
-
-      <Row>
-        <Col></Col>
-        <Col className="col text-center ">
-          <Button
-            className="mt-3 mb-3"
-            variant="primary"
-            type="submit"
-            //onClick={handleSubmit}
-          >
-            Submit
-          </Button>
-        </Col>
-
-        <Col></Col>
+      <Row className="col text-center" sm={4}>
+        <Typography id="discrete-slider" gutterBottom>
+          Mood
+        </Typography>
+        <Slider
+          defaultValue={5}
+          getAriaValueText={valuetext}
+          aria-labelledby="discrete-slider"
+          valueLabelDisplay="auto"
+          step={1}
+          marks
+          min={0}
+          max={10}
+          onChange={handleSlider}
+        />
       </Row>
     </Container>
   );
