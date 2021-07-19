@@ -4,6 +4,8 @@
 
 ## Prerequisites and setup
 
+You must have a file called .env in the root directory. A file called example.env is included, and you must replace the variable names within it with those relevant to you.
+
 In the project directory, you can run:
 
 ### `npm start`

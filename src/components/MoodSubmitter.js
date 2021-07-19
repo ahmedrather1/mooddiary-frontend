@@ -25,7 +25,7 @@ function MoodSubmitter() {
     );
     if (moodFromSlice.mood.moodId === null) {
       let postPayload = {
-        path: "http://localhost:7071/api/entries",
+        path: process.env.REACT_APP_API_URL,
         body: {
           mood: val,
           date: new Date(),
@@ -35,7 +35,7 @@ function MoodSubmitter() {
     } else {
       console.log("updating mood....");
       let updatePayload = {
-        path: "http://localhost:7071/api/entries/" + moodFromSlice.mood.moodId,
+        path: process.env.REACT_APP_API_URL + "/" + moodFromSlice.mood.moodId,
         body: {
           mood: val,
         },
@@ -46,7 +46,7 @@ function MoodSubmitter() {
 
   return (
     <Container>
-      <Row className="col text-center" sm={4}>
+      <Row className="col text-center mt-5">
         <Typography id="discrete-slider" gutterBottom>
           Mood
         </Typography>
