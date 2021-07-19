@@ -5,13 +5,13 @@ export const postMood = createAsyncThunk("mood/postMood", async (payload) => {
   console.log("------    posting obj:");
   console.log(payload);
   let api = new Api();
-  const entryID = await api.post(payload.path, payload.body);
+  const entry = await api.post(payload.path, payload.body);
   console.log("=== entry Id:");
   //debugger;
-  console.log(entryID);
+  console.log(entry);
   console.log("=== end..");
 
-  return { moodVal: payload.body.mood, moodId: entryID.id };
+  return { moodVal: payload.body.mood, moodId: entry.ID };
 });
 
 export const updateMood = createAsyncThunk(
