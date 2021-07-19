@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Api from "../api/Api";
 import { Dropdown, Button, Container, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { postMood } from "../redux/MoodSubmitterSlice";
+import { postMood, updateMood } from "../redux/MoodSubmitterSlice";
 
 function MoodSubmitter() {
   //const [mood, setMood] = useState();
@@ -38,15 +38,24 @@ function MoodSubmitter() {
         " moodID is " +
         moodFromSlice.mood.moodId
     );
-    if (moodFromSlice.mood.moodVal === -1) {
-      let payload = {
+    if (moodFromSlice.mood.moodId === null) {
+      let postPayload = {
         path: "http://localhost:7071/api/entries",
         body: {
           mood: eventKey,
           date: new Date(),
         },
       };
-      dispatch(postMood(payload));
+      dispatch(postMood(postPayload));
+    } else {
+      console.log("updating mood....");
+      let updatePayload = {
+        path: "http://localhost:7071/api/entries/" + moodFromSlice.mood.moodId,
+        body: {
+          mood: eventKey,
+        },
+      };
+      dispatch(updateMood(updatePayload));
     }
   };
 
