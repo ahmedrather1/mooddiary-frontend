@@ -38,6 +38,7 @@ function MoodSubmitter() {
         path: process.env.REACT_APP_API_URL + "/" + moodFromSlice.mood.moodId,
         body: {
           mood: val,
+          date: new Date(),
         },
       };
       dispatch(updateMood(updatePayload));
@@ -46,21 +47,23 @@ function MoodSubmitter() {
 
   return (
     <Container>
-      <Row className="col text-center mt-5">
-        <Typography id="discrete-slider" gutterBottom>
-          Mood
-        </Typography>
-        <Slider
-          defaultValue={5}
-          getAriaValueText={valuetext}
-          aria-labelledby="discrete-slider"
-          valueLabelDisplay="auto"
-          step={1}
-          marks
-          min={0}
-          max={10}
-          onChange={handleSlider}
-        />
+      <Row className="text-center mt-5">
+        <Col className="col-12">
+          <Typography id="discrete-slider" gutterBottom>
+            Mood
+          </Typography>
+          <Slider
+            defaultValue={moodFromSlice.mood.moodVal}
+            //getAriaValueText={valuetext}
+            aria-labelledby="discrete-slider"
+            valueLabelDisplay="auto"
+            step={1}
+            marks
+            min={0}
+            max={10}
+            onChange={handleSlider}
+          />
+        </Col>
       </Row>
     </Container>
   );

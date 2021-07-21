@@ -1,16 +1,22 @@
 import React from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
     <Container fluid>
       <Navbar bg="light" expand="sm" fixed="bottom">
         <Container>
-          <Navbar.Brand href="/">MoodDiary</Navbar.Brand>
+          <LinkContainer to="/">
+            <Navbar.Brand>MoodDiary</Navbar.Brand>
+          </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="about">About</Nav.Link>
+              <LinkContainer to="/about">
+                <Nav.Link>AboutNice</Nav.Link>
+              </LinkContainer>
             </Nav>
           </Navbar.Collapse>
         </Container>

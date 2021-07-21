@@ -7,7 +7,6 @@ export const postMood = createAsyncThunk("mood/postMood", async (payload) => {
   let api = new Api();
   const entry = await api.post(payload.path, payload.body);
   console.log("=== entry Id:");
-  //debugger;
   console.log(entry);
   console.log("=== end..");
 
@@ -20,8 +19,8 @@ export const updateMood = createAsyncThunk(
     console.log("---- updating obj:");
     console.log(payload);
     let api = new Api();
-    await api.update(payload.path, payload.body);
-    return { moodVal: payload.body.mood };
+    const entry = await api.update(payload.path, payload.body);
+    return { moodVal: entry.mood, moodId: entry.ID };
   }
 );
 
@@ -31,6 +30,14 @@ const MoodSubmitterSlice = createSlice({
   reducers: {},
   extraReducers: {
     [postMood.fulfilled]: (state, action) => {
+      return {
+        mood: {
+          moodVal: action.payload.moodVal,
+          moodId: action.payload.moodId,
+        },
+      };
+    },
+    [updateMood.fulfilled]: (state, action) => {
       return {
         mood: {
           moodVal: action.payload.moodVal,
