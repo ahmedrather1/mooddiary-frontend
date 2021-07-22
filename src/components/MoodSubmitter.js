@@ -5,12 +5,15 @@ import { postMood, updateMood } from "../redux/MoodSubmitterSlice";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+import { makeActive } from "../redux/MoodSliderSlice";
 
 function MoodSubmitter() {
-  const [theme, setTheme] = useState("inactive");
-  const [text, setText] = useState("Pick your mood");
+  //const [theme, setTheme] = useState("inactive");
+  //const [text, setText] = useState("Pick your mood");
 
   const moodFromSlice = useSelector((state) => state.mood);
+  const sliderSlice = useSelector((state) => state.slider);
+
   const dispatch = useDispatch();
 
   const activeTheme = createTheme({
@@ -36,8 +39,10 @@ function MoodSubmitter() {
         " moodID is " +
         moodFromSlice.mood.moodId
     );
-    setTheme("active");
-    setText("Mood");
+    //setTheme("active");
+    //setText("Mood");
+    dispatch(makeActive());
+
     if (moodFromSlice.mood.moodId === null) {
       let postPayload = {
         path: process.env.REACT_APP_API_URL,
@@ -65,10 +70,12 @@ function MoodSubmitter() {
       <Row className="text-center mt-5">
         <Col className="col-12">
           <ThemeProvider
-            theme={theme === "inactive" ? inactiveTheme : activeTheme}
+            theme={
+              sliderSlice.theme === "inactive" ? inactiveTheme : activeTheme
+            }
           >
             <Typography id="discrete-slider" gutterBottom>
-              {text}
+              {sliderSlice.text}
             </Typography>
             <Slider
               defaultValue={moodFromSlice.mood.moodVal}
