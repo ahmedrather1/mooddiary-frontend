@@ -15,7 +15,7 @@ function Footer() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <LinkContainer to="/about">
-                <Nav.Link>AboutNice</Nav.Link>
+                <Nav.Link>About</Nav.Link>
               </LinkContainer>
             </Nav>
           </Navbar.Collapse>
