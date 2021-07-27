@@ -28,4 +28,17 @@ Api.prototype.update = async function (path, body) {
   }
 };
 
+Api.prototype.get = async function (path, body) {
+  let axiosApi = axios.create();
+  axiosApi.defaults.headers.common["Content-Type"] = "application/json";
+
+  try {
+    const resp = await axiosApi.get(path, body);
+    return resp.data;
+  } catch (error) {
+    console.log("error data:");
+    console.log(error.response.data);
+  }
+};
+
 export default Api;

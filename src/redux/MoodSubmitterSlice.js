@@ -2,13 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Api from "../api/Api";
 
 export const postMood = createAsyncThunk("mood/postMood", async (payload) => {
-  console.log("------    posting obj:");
   console.log(payload);
   let api = new Api();
   const entry = await api.post(payload.path, payload.body);
-  console.log("=== entry Id:");
   console.log(entry);
-  console.log("=== end..");
 
   return { moodVal: payload.body.mood, moodId: entry.ID };
 });
@@ -16,7 +13,6 @@ export const postMood = createAsyncThunk("mood/postMood", async (payload) => {
 export const updateMood = createAsyncThunk(
   "mood/updateMood",
   async (payload) => {
-    console.log("---- updating obj:");
     console.log(payload);
     let api = new Api();
     const entry = await api.update(payload.path, payload.body);
@@ -24,9 +20,24 @@ export const updateMood = createAsyncThunk(
   }
 );
 
+export const getInitialMood = createAsyncThunk(
+  "mood/getInitialMood",
+  async (input) => {
+    let api = new Api();
+    const entry = await api.get(input.path, input.body);
+
+    if (entry.DiaryEntries.length !== 0) {
+      return {
+        moodVal: entry.DiaryEntries[0].mood,
+        moodId: entry.DiaryEntries[0].ID,
+      };
+    }
+  }
+);
+
 const MoodSubmitterSlice = createSlice({
   name: "mood",
-  initialState: { mood: { moodVal: -1, moodId: null } },
+  initialState: { mood: { moodVal: -1, moodId: null, modified: false } },
   reducers: {},
   extraReducers: {
     [postMood.fulfilled]: (state, action) => {
@@ -34,6 +45,7 @@ const MoodSubmitterSlice = createSlice({
         mood: {
           moodVal: action.payload.moodVal,
           moodId: action.payload.moodId,
+          modified: true,
         },
       };
     },
@@ -42,6 +54,16 @@ const MoodSubmitterSlice = createSlice({
         mood: {
           moodVal: action.payload.moodVal,
           moodId: action.payload.moodId,
+          modified: true,
+        },
+      };
+    },
+    [getInitialMood.fulfilled]: (state, action) => {
+      return {
+        mood: {
+          moodVal: action.payload.moodVal,
+          moodId: action.payload.moodId,
+          modified: true,
         },
       };
     },
