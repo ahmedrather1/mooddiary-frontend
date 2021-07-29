@@ -27,10 +27,13 @@ export const getInitialMood = createAsyncThunk(
     const entry = await api.get(input.path, input.body);
 
     if (entry.DiaryEntries.length !== 0) {
+      console.log("returning");
       return {
         moodVal: entry.DiaryEntries[0].mood,
         moodId: entry.DiaryEntries[0].ID,
       };
+    } else {
+      return { null: true };
     }
   }
 );
@@ -59,13 +62,15 @@ const MoodSubmitterSlice = createSlice({
       };
     },
     [getInitialMood.fulfilled]: (state, action) => {
-      return {
-        mood: {
-          moodVal: action.payload.moodVal,
-          moodId: action.payload.moodId,
-          modified: true,
-        },
-      };
+      if (!action.payload.null) {
+        return {
+          mood: {
+            moodVal: action.payload.moodVal,
+            moodId: action.payload.moodId,
+            modified: true,
+          },
+        };
+      }
     },
   },
 });
