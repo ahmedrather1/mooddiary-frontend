@@ -9,7 +9,6 @@ import {
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
-import { makeActive } from "../redux/MoodSliderSlice";
 
 function MoodSubmitter() {
   const dispatch = useDispatch();

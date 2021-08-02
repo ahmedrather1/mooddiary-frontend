@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import MoodReducer from "./MoodSubmitterSlice";
-import SliderReducer from "./MoodSliderSlice";
+import EntriesListReducer from "./EntriesListSlice";
 
 export default configureStore({
   reducer: {
     mood: MoodReducer,
-    slider: SliderReducer,
+    entriesList: EntriesListReducer,
   },
 });
