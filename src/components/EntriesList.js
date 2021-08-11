@@ -19,7 +19,6 @@ function EntriesList() {
     if (entries == null) {
       return;
     }
-    console.log(entries.list);
     setMappedEntries(entries.list);
   }, [entries.loading]);
 
@@ -48,7 +47,43 @@ function EntriesList() {
       }
     }
 
+    for (let year in allEntries) {
+      for (let month in allEntries.year) {
+        allEntries[year][month].reverse();
+      }
+    }
+
+    console.log(allEntries);
+
     return allEntries;
+  };
+
+  let getMonthByNum = function (month) {
+    if (month === "0") {
+      return "January";
+    } else if (month === "1") {
+      return "February";
+    } else if (month === "2") {
+      return "March";
+    } else if (month === "3") {
+      return "April";
+    } else if (month === "4") {
+      return "May";
+    } else if (month === "5") {
+      return "June";
+    } else if (month === "6") {
+      return "July";
+    } else if (month === "7") {
+      return "August";
+    } else if (month === "8") {
+      return "September";
+    } else if (month === "9") {
+      return "October";
+    } else if (month === "10") {
+      return "November";
+    } else if (month === "11") {
+      return "December";
+    }
   };
 
   return (
@@ -75,30 +110,31 @@ function EntriesList() {
                                 variant="link"
                                 eventKey="0"
                               >
-                                {month}
+                                {getMonthByNum(month)}
                               </Accordion.Toggle>
                             </Card.Header>
                             <Accordion.Collapse eventKey="0">
                               <Card.Body>
                                 {sortEntries(mappedEntries)[year][month].map(
                                   (entry, entryIndex) => {
+                                    let ref = "/entry/" + entry.ID;
                                     return (
-                                      <Card>
-                                        <Card.Header>
-                                          <Accordion.Toggle
-                                            as={Button}
-                                            variant="link"
-                                            eventKey="0"
-                                          >
-                                            {entry.date}
-                                          </Accordion.Toggle>
-                                        </Card.Header>
-                                        <Accordion.Collapse eventKey="0">
-                                          <Card.Body>
-                                            Hello! I'm the body
-                                          </Card.Body>
-                                        </Accordion.Collapse>
-                                      </Card>
+                                      <a href={ref}>
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                          }}
+                                        >
+                                          <p>
+                                            {new Date(
+                                              entry.date
+                                            ).toDateString()}
+                                            &nbsp;
+                                          </p>
+                                          <p>&nbsp; Mood: {entry.mood}</p>
+                                        </div>
+                                      </a>
                                     );
                                   }
                                 )}
