@@ -53,8 +53,6 @@ function EntriesList() {
       }
     }
 
-    console.log(allEntries);
-
     return allEntries;
   };
 
@@ -90,7 +88,7 @@ function EntriesList() {
     <>
       {Object.keys(sortEntries(mappedEntries)).map((year, yearIndex) => {
         return (
-          <Accordion defaultActiveKey="0">
+          <Accordion defaultActiveKey="0" key={year}>
             <Card>
               <Card.Header>
                 <Accordion.Toggle as={Button} variant="link" eventKey="0">
@@ -102,7 +100,7 @@ function EntriesList() {
                   {Object.keys(sortEntries(mappedEntries)[year]).map(
                     (month, monthIndex) => {
                       return (
-                        <Accordion defaultActiveKey="0">
+                        <Accordion defaultActiveKey="0" key={month}>
                           <Card>
                             <Card.Header>
                               <Accordion.Toggle
@@ -119,7 +117,7 @@ function EntriesList() {
                                   (entry, entryIndex) => {
                                     let ref = "/entry/" + entry.ID;
                                     return (
-                                      <a href={ref}>
+                                      <a href={ref} key={entry.date}>
                                         <div
                                           style={{
                                             display: "flex",

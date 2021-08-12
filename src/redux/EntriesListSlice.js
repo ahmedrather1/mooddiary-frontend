@@ -22,7 +22,6 @@ const EntriesListSlice = createSlice({
   reducers: {},
   extraReducers: {
     [getAllEntries.fulfilled]: (state, action) => {
-      console.log("from slice: " + action.payload);
       return { list: action.payload, loading: false };
     },
     [getAllEntries.pending]: (state, action) => {

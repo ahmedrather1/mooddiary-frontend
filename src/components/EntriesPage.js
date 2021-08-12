@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import EntriesList from "./EntriesList";
+import EntriesGraph from "./EntriesGraph";
 
 function EntriesPage() {
   return (
@@ -16,6 +17,7 @@ function EntriesPage() {
           </Col>
           <Col sm={6} xs={12} className="mt-5">
             graph component
+            <EntriesGraph />
           </Col>
         </Row>
       </Container>

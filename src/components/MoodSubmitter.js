@@ -17,9 +17,6 @@ function MoodSubmitter() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let now = new Date();
-    let nowJson = now.toJSON();
-
     let midnightBegin = new Date();
     midnightBegin.setHours(0, 0, 0);
     let midnightBeginJson = midnightBegin.toJSON();
@@ -27,12 +24,6 @@ function MoodSubmitter() {
     let midnightEnd = new Date();
     midnightEnd.setHours(23, 59, 59);
     let midnightEndJson = midnightEnd.toJSON();
-
-    let today = new Date();
-    let todayJson = today.toJSON();
-    console.log(midnightBeginJson);
-    console.log(todayJson);
-    console.log(midnightEndJson);
 
     let input = {
       path:
