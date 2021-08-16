@@ -1,12 +1,64 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllEntries } from "../redux/EntriesListSlice";
+import { getSomeEntries } from "../redux/EntriesGraphSlice";
 import { Line } from "react-chartjs-2";
 import { Tabs, Tab } from "react-bootstrap";
 
 function EntriesGraph() {
   const entries = useSelector((state) => state.entriesList);
-  const [key, setKey] = useState("home");
+  const someEntries = useSelector((state) => state.entriesGraph);
+
+  const [key, setKey] = useState("all");
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    let today = new Date();
+
+    let weekAgo = new Date();
+    let monthAgo = new Date();
+    let yearAgo = new Date();
+
+    weekAgo.setDate(today.getDate() - 7);
+    monthAgo.setDate(today.getDate() - 31);
+    yearAgo.setDate(today.getDate() - 365);
+
+    weekAgo.setDate(weekAgo.getDate());
+    let input = {
+      yearPath:
+        process.env.REACT_APP_API_URL +
+        "?createdFrom=" +
+        yearAgo.toJSON() +
+        "&createdTo=" +
+        today.toJSON(),
+      monthPath:
+        process.env.REACT_APP_API_URL +
+        "?createdFrom=" +
+        monthAgo.toJSON() +
+        "&createdTo=" +
+        today.toJSON(),
+      weekPath:
+        process.env.REACT_APP_API_URL +
+        "?createdFrom=" +
+        weekAgo.toJSON() +
+        "&createdTo=" +
+        today.toJSON(),
+      body: {},
+    };
+
+    dispatch(getSomeEntries(input));
+  }, []);
+
+  useEffect(() => {
+    console.log("week:");
+    console.log(someEntries.week);
+    console.log("month:");
+    console.log(someEntries.month);
+    console.log("year:");
+    console.log(someEntries.year);
+    console.log("all:");
+    console.log(entries.list);
+  }, [someEntries]);
 
   const createDataset = function (list) {
     let dataset = [];
@@ -14,23 +66,26 @@ function EntriesGraph() {
       dataset.push({ x: element.date.substr(0, 10), y: element.mood });
     }
 
-    console.log(dataset);
+    //console.log(dataset);
 
     return dataset;
   };
 
-  const data = {
-    //labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        label: "Mood",
-        data: createDataset(entries.list),
-        fill: true,
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
-      },
-    ],
+  const createData = function (dataList) {
+    return {
+      //labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+      datasets: [
+        {
+          label: "Mood",
+          data: createDataset(dataList),
+          fill: true,
+          backgroundColor: "rgba(75,192,192,0.2)",
+          borderColor: "rgba(75,192,192,1)",
+        },
+      ],
+    };
   };
+
   let options1 = {
     title: { text: "This is a test" },
     scales: {
@@ -69,16 +124,16 @@ function EntriesGraph() {
         onSelect={(k) => setKey(k)}
       >
         <Tab eventKey="all" title="All">
-          <Line data={data} options={options1} />
+          <Line data={createData(entries.list)} options={options1} />
         </Tab>
         <Tab eventKey="year" title="Year">
-          <Line data={data} options={options1} />
+          <Line data={createData(someEntries.year)} options={options1} />
         </Tab>
         <Tab eventKey="month" title="Month">
-          hello2
+          <Line data={createData(someEntries.month)} options={options1} />
         </Tab>
         <Tab eventKey="week" title="Week">
-          hello3
+          <Line data={createData(someEntries.week)} options={options1} />
         </Tab>
       </Tabs>
     </>

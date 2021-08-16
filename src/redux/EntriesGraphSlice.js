@@ -25,8 +25,8 @@ const EntriesGraphSlice = createSlice({
     [getSomeEntries.fulfilled]: (state, action) => {
       return {
         year: action.payload.year,
-        month: action.payload.week,
-        week: action.payload.month,
+        month: action.payload.month,
+        week: action.payload.week,
         loading: false,
       };
     },
