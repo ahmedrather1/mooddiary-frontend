@@ -49,25 +49,11 @@ function EntriesGraph() {
     dispatch(getSomeEntries(input));
   }, []);
 
-  useEffect(() => {
-    console.log("week:");
-    console.log(someEntries.week);
-    console.log("month:");
-    console.log(someEntries.month);
-    console.log("year:");
-    console.log(someEntries.year);
-    console.log("all:");
-    console.log(entries.list);
-  }, [someEntries]);
-
   const createDataset = function (list) {
     let dataset = [];
     for (let element of list) {
       dataset.push({ x: element.date.substr(0, 10), y: element.mood });
     }
-
-    //console.log(dataset);
-
     return dataset;
   };
 

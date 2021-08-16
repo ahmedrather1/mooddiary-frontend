@@ -26,36 +26,6 @@ function EntriesList() {
     return <div>No results..</div>;
   }
 
-  let sortEntries = function (entryArray) {
-    let allEntries = {};
-    for (let element of entryArray) {
-      let entryDate = new Date(element.date);
-      let entryYear = entryDate.getFullYear();
-      let entryMonth = entryDate.getMonth();
-
-      if (!allEntries.hasOwnProperty(entryYear)) {
-        allEntries[entryYear] = {};
-        allEntries[entryYear][entryMonth] = [];
-        allEntries[entryYear][entryMonth].push(element);
-      } else {
-        if (!allEntries[entryYear].hasOwnProperty(entryMonth)) {
-          allEntries[entryYear][entryMonth] = [];
-          allEntries[entryYear][entryMonth].push(element);
-        } else {
-          allEntries[entryYear][entryMonth].push(element);
-        }
-      }
-    }
-
-    for (let year in allEntries) {
-      for (let month in allEntries.year) {
-        allEntries[year][month].reverse();
-      }
-    }
-
-    return allEntries;
-  };
-
   let getMonthByNum = function (month) {
     if (month === "0") {
       return "January";
@@ -84,7 +54,95 @@ function EntriesList() {
     }
   };
 
+  let sortEntries = function (entryArray) {
+    let allEntries = {};
+
+    for (let element of entryArray) {
+      let entryDate = new Date(element.date);
+      let entryYear = entryDate.getFullYear();
+      let entryMonth = entryDate.getMonth();
+
+      if (!allEntries.hasOwnProperty(entryYear)) {
+        allEntries[entryYear] = {};
+        allEntries[entryYear][entryMonth] = [];
+        allEntries[entryYear][entryMonth].push(element);
+      } else {
+        if (!allEntries[entryYear].hasOwnProperty(entryMonth)) {
+          allEntries[entryYear][entryMonth] = [];
+          allEntries[entryYear][entryMonth].push(element);
+        } else {
+          allEntries[entryYear][entryMonth].push(element);
+        }
+      }
+    }
+
+    for (let year in allEntries) {
+      for (let month in allEntries.year) {
+        allEntries[year][month].reverse();
+      }
+    }
+    return allEntries;
+  };
+
+  let sortEntriesProperly = function (entryObject) {
+    let properObj = {};
+
+    for (let year in entryObject) {
+      for (let month in entryObject[year]) {
+        let string = `${getMonthByNum(month)} ${year}`;
+        let val = entryObject[year][month];
+        properObj[string] = val;
+      }
+    }
+
+    return properObj;
+  };
+
   return (
+    <>
+      {Object.keys(sortEntriesProperly(sortEntries(mappedEntries))).map(
+        (monthYear, monthYearIndex) => {
+          return (
+            <Accordion defaultActiveKey="0" key={monthYear}>
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    {monthYear}
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body>
+                    {sortEntriesProperly(sortEntries(mappedEntries))[
+                      monthYear
+                    ].map((entry, entryID) => {
+                      let ref = "/entry/" + entry.ID;
+                      return (
+                        <a href={ref} key={entry.date}>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <p>
+                              {new Date(entry.date).toDateString()}
+                              &nbsp;
+                            </p>
+                            <p>&nbsp; Mood: {entry.mood}</p>
+                          </div>
+                        </a>
+                      );
+                    })}
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          );
+        }
+      )}
+    </>
+
+    /*
     <>
       {Object.keys(sortEntries(mappedEntries)).map((year, yearIndex) => {
         return (
@@ -150,6 +208,8 @@ function EntriesList() {
         );
       })}
     </>
+
+    */
   );
 }
 
