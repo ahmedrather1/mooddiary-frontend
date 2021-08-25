@@ -1,58 +1,94 @@
 import React, { useEffect, useState } from "react";
-//import axios from "axios";
-import Api from "../api/Api";
-import { Dropdown, Button, Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { postMood, updateMood } from "../redux/MoodSubmitterSlice";
+import {
+  getInitialMood,
+  postMood,
+  updateMood,
+} from "../redux/MoodSubmitterSlice";
+import Typography from "@material-ui/core/Typography";
+import Slider from "@material-ui/core/Slider";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+import { makeActive } from "../redux/MoodSliderSlice";
 
 function MoodSubmitter() {
-  //const [mood, setMood] = useState();
-
-  const moodFromSlice = useSelector((state) => state.mood);
   const dispatch = useDispatch();
 
-  /*
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("submitted " + mood.moodVal);
+  const moodFromSlice = useSelector((state) => state.mood);
+  const [loading, setLoading] = useState(true);
 
-    let api = new Api();
-    api.post("http://localhost:7071/api/entries", {
-      mood: mood.moodVal,
-      date: new Date(),
-    });
-  };
-  
+  useEffect(() => {
+    let now = new Date();
+    let nowJson = now.toJSON();
 
-  const handleSelect = (eventKey) => {
-    console.log(eventKey);
-    let updatedMood = { moodVal: eventKey };
-    setMood(updatedMood);
-  };
-  */
+    let midnightBegin = new Date();
+    midnightBegin.setHours(0, 0, 0);
+    let midnightBeginJson = midnightBegin.toJSON();
 
-  const handleSelect = (eventKey) => {
-    console.log(
-      "from select, moodval is: " +
-        moodFromSlice.mood.moodVal +
-        " moodID is " +
-        moodFromSlice.mood.moodId
-    );
+    let midnightEnd = new Date();
+    midnightEnd.setHours(23, 59, 59);
+    let midnightEndJson = midnightEnd.toJSON();
+
+    let today = new Date();
+    let todayJson = today.toJSON();
+    console.log(midnightBeginJson);
+    console.log(todayJson);
+    console.log(midnightEndJson);
+
+    let input = {
+      path:
+        process.env.REACT_APP_API_URL +
+        "?" +
+        "createdFrom=" +
+        midnightBeginJson +
+        "&" +
+        "createdTo=" +
+        midnightEndJson,
+      body: null,
+    };
+    dispatch(getInitialMood(input));
+  }, []);
+
+  // this functionality to not show initial moodSubmitter state needs to be fixed
+  useEffect(() => {
+    if (moodFromSlice === null) {
+      return;
+    }
+    setLoading(false);
+  }, [moodFromSlice]);
+
+  const activeTheme = createTheme({
+    palette: {
+      primary: {
+        main: "#00bcd4",
+      },
+    },
+  });
+
+  const inactiveTheme = createTheme({
+    palette: {
+      primary: {
+        main: "#616161",
+      },
+    },
+  });
+
+  const handleSlider = (event, val) => {
     if (moodFromSlice.mood.moodId === null) {
       let postPayload = {
-        path: "http://localhost:7071/api/entries",
+        path: process.env.REACT_APP_API_URL,
         body: {
-          mood: eventKey,
+          mood: val,
           date: new Date(),
         },
       };
       dispatch(postMood(postPayload));
     } else {
-      console.log("updating mood....");
       let updatePayload = {
-        path: "http://localhost:7071/api/entries/" + moodFromSlice.mood.moodId,
+        path: process.env.REACT_APP_API_URL + "/" + moodFromSlice.mood.moodId,
         body: {
-          mood: eventKey,
+          mood: val,
+          date: new Date(),
         },
       };
       dispatch(updateMood(updatePayload));
@@ -61,48 +97,36 @@ function MoodSubmitter() {
 
   return (
     <Container>
-      <Row className="col text-center">
-        <Col></Col>
-        <Col className="mt-4 mb-3">
-          <Dropdown onSelect={handleSelect}>
-            <Dropdown.Toggle variant="primary" id="dropdown-basic">
-              Select mood
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item eventKey="1">1</Dropdown.Item>
-              <Dropdown.Item eventKey="2">2</Dropdown.Item>
-              <Dropdown.Item eventKey="3">3</Dropdown.Item>
-              <Dropdown.Item eventKey="4">4</Dropdown.Item>
-              <Dropdown.Item eventKey="5">5</Dropdown.Item>
-              <Dropdown.Item eventKey="6">6</Dropdown.Item>
-              <Dropdown.Item eventKey="7">7</Dropdown.Item>
-              <Dropdown.Item eventKey="8">8</Dropdown.Item>
-              <Dropdown.Item eventKey="9">9</Dropdown.Item>
-              <Dropdown.Item eventKey="10">10</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Col>
-        <Col className="mt-3 mb-3">
-          <h1>Mood: {moodFromSlice.moodVal}</h1>
-        </Col>
-        <Col></Col>
-      </Row>
-
-      <Row>
-        <Col></Col>
-        <Col className="col text-center ">
-          <Button
-            className="mt-3 mb-3"
-            variant="primary"
-            type="submit"
-            //onClick={handleSubmit}
+      <Row className="text-center mt-5">
+        <Col className="col-12">
+          <ThemeProvider
+            theme={
+              moodFromSlice.mood.modified === false
+                ? inactiveTheme
+                : activeTheme
+            }
           >
-            Submit
-          </Button>
-        </Col>
+            {!loading && (
+              <>
+                <Typography id="discrete-slider" gutterBottom>
+                  {moodFromSlice.mood.modified === false ? "Pick mood" : "Mood"}
+                </Typography>
 
-        <Col></Col>
+                <Slider
+                  key={`slider-${moodFromSlice.mood.moodVal}`}
+                  defaultValue={moodFromSlice.mood.moodVal}
+                  aria-labelledby="discrete-slider"
+                  valueLabelDisplay="auto"
+                  step={1}
+                  marks
+                  min={0}
+                  max={10}
+                  onChange={handleSlider}
+                />
+              </>
+            )}
+          </ThemeProvider>
+        </Col>
       </Row>
     </Container>
   );
