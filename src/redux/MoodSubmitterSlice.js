@@ -13,7 +13,6 @@ export const postMood = createAsyncThunk("mood/postMood", async (payload) => {
 export const updateMood = createAsyncThunk(
   "mood/updateMood",
   async (payload) => {
-    console.log(payload);
     let api = new Api();
     const entry = await api.update(payload.path, payload.body);
     return { moodVal: entry.mood, moodId: entry.ID };
@@ -27,7 +26,6 @@ export const getInitialMood = createAsyncThunk(
     const entry = await api.get(input.path, input.body);
 
     if (entry.DiaryEntries.length !== 0) {
-      console.log("returning");
       return {
         moodVal: entry.DiaryEntries[0].mood,
         moodId: entry.DiaryEntries[0].ID,
