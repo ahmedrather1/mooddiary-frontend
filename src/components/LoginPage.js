@@ -3,6 +3,7 @@ import LoggedOutHeader from "./common/LoggedOutHeader";
 import Footer from "./common/Footer";
 import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 import { logIn, logOut } from "../redux/LoginSlice";
 
@@ -21,6 +22,7 @@ function LoginPage() {
       <Button variant="primary" onClick={handleLoginButton}>
         Click to Login
       </Button>
+      <GoogleLoginButton onClick={handleLoginButton} />
       <Footer />
     </>
   );

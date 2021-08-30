@@ -1,0 +1,35 @@
+import React from "react";
+import GoogleLogin from "react-google-login";
+import { useDispatch } from "react-redux";
+import { logIn, logOut } from "../redux/LoginSlice";
+
+const clientId =
+  "1068756762932-ng0vmgiri6prka0i05mlvvqatq76bsb0.apps.googleusercontent.com";
+
+function GoogleLoginButton() {
+  const dispatch = useDispatch();
+
+  const onLoginSuccess = (res) => {
+    console.log("Login Success:", res.profileObj);
+    dispatch(logIn());
+  };
+
+  const onLoginFailure = (res) => {
+    console.log("Login Failed:", res);
+  };
+
+  return (
+    <div>
+      <GoogleLogin
+        clientId={clientId}
+        buttonText="Sign in"
+        onSuccess={onLoginSuccess}
+        onFailure={onLoginFailure}
+        cookiePolicy={"single_host_origin"}
+        isSignedIn={true}
+      />
+    </div>
+  );
+}
+
+export default GoogleLoginButton;
