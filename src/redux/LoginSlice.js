@@ -5,10 +5,10 @@ const LoginSlice = createSlice({
   initialState: { login: { isLoggedIn: false, email: null } },
   reducers: {
     logIn: () => {
-      console.log("recieved");
       return { login: { isLoggedIn: true, email: null } };
     },
-    logOut: (state, action) => {
+    logOut: () => {
+      console.log("logged out fro slice");
       return { login: { isLoggedIn: false, email: null } };
     },
   },

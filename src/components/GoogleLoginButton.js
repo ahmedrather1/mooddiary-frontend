@@ -27,6 +27,7 @@ function GoogleLoginButton() {
         onFailure={onLoginFailure}
         cookiePolicy={"single_host_origin"}
         isSignedIn={true}
+        uxMode={"popup"}
       />
     </div>
   );

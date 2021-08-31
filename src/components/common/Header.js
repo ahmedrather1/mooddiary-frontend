@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import GoogleLogoutButton from "../GoogleLogoutButton";
 
 function Header() {
   return (
@@ -23,6 +24,7 @@ function Header() {
               <LinkContainer to="settings">
                 <Nav.Link>Settings</Nav.Link>
               </LinkContainer>
+              <Nav.Link> </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
