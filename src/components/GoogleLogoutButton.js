@@ -25,6 +25,7 @@ function GoogleLogoutButton() {
         buttonText="Sign Out"
         onLogoutSuccess={onLogoutSuccess}
         onFailure={onLogoutFailure}
+        cookiePolicy={"single_host_origin"}
       ></GoogleLogout>
     </div>
   );

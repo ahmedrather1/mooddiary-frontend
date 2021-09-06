@@ -24,7 +24,9 @@ function Header() {
               <LinkContainer to="settings">
                 <Nav.Link>Settings</Nav.Link>
               </LinkContainer>
-              <Nav.Link> </Nav.Link>
+              <Nav.Link>
+                <GoogleLogoutButton />
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

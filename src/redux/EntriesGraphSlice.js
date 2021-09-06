@@ -3,11 +3,15 @@ import Api from "../api/Api";
 
 export const getSomeEntries = createAsyncThunk(
   "entriesGraph/getSomeEntries",
-  async (input) => {
+  async (input, { getState }) => {
     let api = new Api();
-    const yearEntries = await api.get(input.yearPath, input.body);
-    const monthEntries = await api.get(input.monthPath, input.body);
-    const weekEntries = await api.get(input.weekPath, input.body);
+    const state = getState();
+    const config = {
+      headers: [{ header: "Auth", headerVal: state.login?.login?.googleId }],
+    };
+    const yearEntries = await api.get(input.yearPath, input.body, config);
+    const monthEntries = await api.get(input.monthPath, input.body, config);
+    const weekEntries = await api.get(input.weekPath, input.body, config);
 
     return {
       year: yearEntries.DiaryEntries,

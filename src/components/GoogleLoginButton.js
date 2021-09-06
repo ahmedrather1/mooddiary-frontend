@@ -11,11 +11,13 @@ function GoogleLoginButton() {
 
   const onLoginSuccess = (res) => {
     console.log("Login Success:", res.profileObj);
-    dispatch(logIn());
+    dispatch(
+      logIn({ id: res.profileObj.googleId, name: res.profileObj.givenName })
+    );
   };
 
   const onLoginFailure = (res) => {
-    console.log("Login Failed:", res);
+    console.log("Login Failed:", res.profileObj);
   };
 
   return (

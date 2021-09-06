@@ -8,21 +8,12 @@ import GoogleLoginButton from "./GoogleLoginButton";
 import { logIn, logOut } from "../redux/LoginSlice";
 
 function LoginPage() {
-  const dispatch = useDispatch();
-
-  const handleLoginButton = () => {
-    console.log("dispatched");
-    dispatch(logIn());
-  };
-
   return (
     <>
       <LoggedOutHeader />
       <h1>Need to login</h1>
-      <Button variant="primary" onClick={handleLoginButton}>
-        Click to Login
-      </Button>
-      <GoogleLoginButton onClick={handleLoginButton} />
+
+      <GoogleLoginButton />
       <Footer />
     </>
   );
