@@ -21,16 +21,23 @@ export const updateMood = createAsyncThunk(
 
 export const getInitialMood = createAsyncThunk(
   "mood/getInitialMood",
-  async (input) => {
+  async (input, { getState }) => {
     let api = new Api();
-    const entry = await api.get(input.path, input.body);
+    const state = getState();
+    const config = {
+      headers: [{ header: "Auth", headerVal: state.login?.login?.googleId }],
+    };
+    const entry = await api.get(input.path, input.body, config);
 
     if (entry.DiaryEntries.length !== 0) {
+      console.log("from slice: " + entry.DiaryEntries);
+
       return {
         moodVal: entry.DiaryEntries[0].mood,
         moodId: entry.DiaryEntries[0].ID,
       };
     } else {
+      console.log("from slice: " + entry.DiaryEntries);
       return { null: true };
     }
   }
